@@ -1,34 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const apiKey = "AIzaSyCJP3SdgAzM2gFQE-uQT3C2Wf884JPEhbI";
+const apiKey = "AIzaSyDxnitmNIyjKZB1F6IvduTLdJyByBXdD9I";
 
 export const fetchMovieData = createAsyncThunk(
   "movie/fetchMovies",
   async (searchQuery = "latest movies", thunkAPI) => {
     try {
-      let allVideos = [];
-      let nextPageToken = '';
-      const maxResults = 50; 
-      const totalVideosNeeded = 60; 
+      const response = await axios.get(
+        `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
+          searchQuery + ' official trailer'
+        )}&type=video&maxResults=20&key=${apiKey}`
+      );
 
-      while (allVideos.length < totalVideosNeeded) {
-        const response = await axios.get(
-          `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
-            searchQuery + ' official trailer'
-          )}&type=video&maxResults=${Math.min(
-            maxResults,
-            totalVideosNeeded - allVideos.length
-          )}&key=${apiKey}${nextPageToken ? `&pageToken=${nextPageToken}` : ''}`
-        );
-
-        allVideos = [...allVideos, ...response.data.items];
-        nextPageToken = response.data.nextPageToken;
-
-        if (!nextPageToken) break; 
-      }
-
-      const transformedData = allVideos.slice(0, totalVideosNeeded).map(item => ({
+      const transformedData = response.data.items.map(item => ({
         imdbID: item.id.videoId,
         Title: item.snippet.title,
         Year: new Date(item.snippet.publishedAt).getFullYear(),
@@ -50,9 +35,14 @@ const MovieSlice = createSlice({
   initialState: {
     list: [],
     status: "idle",
+    search: '',
     error: null,
   },
-  reducers: {},
+  reducers: {
+    setSearchQuery: (state, action) => {
+      state.search = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchMovieData.pending, (state) => {
@@ -70,4 +60,5 @@ const MovieSlice = createSlice({
   },
 });
 
+export const { setSearchQuery } = MovieSlice.actions;
 export default MovieSlice.reducer;

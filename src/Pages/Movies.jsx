@@ -3,25 +3,23 @@ import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import { fetchMovieData } from '../Features/DataSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const Movies = () => {
     const { list: MoviesData, status } = useSelector((state) => state.movieData);
     const dispatch = useDispatch();
     
     useEffect(() => {
-        if (status === 'idle') {
-            dispatch(fetchMovieData());
-        }
-    }, [dispatch, status]);
+        dispatch(fetchMovieData("popular movies"));
+    }, [dispatch]);
 
     return (
         <div className="bg-[#151b20] min-h-screen">
             <Header />
-            <div className="w-[90%] mt-24 md:w-[85%] mx-auto py-10">
+            <div className="w-[90%] mt-20 md:w-[85%] mx-auto py-10">
                 {status === 'pending' && (
                     <div className="flex justify-center items-center h-64">
-                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
                     </div>
                 )}
                 {status === 'rejected' && (
@@ -30,13 +28,16 @@ const Movies = () => {
 
                 {status === 'succeeded' && MoviesData && MoviesData.length > 0 && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                        {MoviesData.map((item, index) => (
-                            <NavLink to={`/playmovie/${item.imdbID}`} key={index} className="group relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-xl">
-                                <div className="relative h-80 ">
+                        {MoviesData.map((item) => (
+                            <NavLink to={`/playmovie/${item.imdbID}`} key={item.imdbID} className="group relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                                <div className="relative h-80">
                                     <img 
                                         src={item.Poster} 
                                         alt={item.Title} 
-                                        className="max-w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-70" 
+                                        className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-70" 
+                                        onError={(e) => {
+                                            e.target.src = 'https://via.placeholder.com/300x450?text=No+Poster';
+                                        }}
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
                                     <div className="absolute bottom-0 left-0 right-0 p-4 text-white">

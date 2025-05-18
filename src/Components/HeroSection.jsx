@@ -10,12 +10,10 @@ const HeroSection = () => {
     const [activeIndex, setActiveIndex] = useState(0);
 
     useEffect(() => {
-        if (status === 'idle') {
-            dispatch(fetchMovieData("popular movies"));
-        }
-    }, [dispatch, status]);
+        dispatch(fetchMovieData("popular movies"));
+    }, [dispatch]);
 
-    const validMovieData = MovieData && MovieData.length > 0 ? MovieData : [];
+    const validMovieData = MovieData || [];
     const itemsPerPage = 5;
     const totalPages = Math.ceil(validMovieData.length / itemsPerPage);
     const paginatedMovies = Array.from({ length: totalPages }, (_, i) =>
@@ -67,14 +65,13 @@ const HeroSection = () => {
                     <>
                         <div className="w-full overflow-x-auto scrollbar-hide">
                             <div className="flex gap-4 w-max">
-                                {paginatedMovies[activeIndex].map((item, index) => (
+                                {paginatedMovies[activeIndex]?.map((item) => (
                                     <Link to={`/playmovie/${item.imdbID}`} key={item.imdbID}>
                                         <motion.div
                                             variants={cardVariants}
                                             initial="hidden"
                                             animate="visible"
                                             whileHover="hover"
-                                            custom={index}
                                             className="w-[140px] h-[250px] sm:w-[180px] md:w-[230px] md:h-[300px] rounded-lg overflow-hidden bg-white shadow-lg cursor-pointer"
                                         >
                                             <div className="h-[70%] overflow-hidden rounded-lg p-1">
@@ -107,9 +104,7 @@ const HeroSection = () => {
                                 {paginatedMovies.map((_, idx) => (
                                     <motion.button
                                         key={idx}
-                                        onClick={() => {
-                                            setActiveIndex(idx);
-                                        }}
+                                        onClick={() => setActiveIndex(idx)}
                                         variants={paginationDotVariants}
                                         animate={activeIndex === idx ? "active" : "inactive"}
                                         className="w-3 h-3 rounded-full"
