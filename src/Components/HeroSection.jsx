@@ -15,13 +15,14 @@ const HeroSection = () => {
     }, [dispatch]);
 
     const validMovieData = MovieData || [];
-    const itemsPerPage = 5;
+    const mobileItemsPerPage = 2;
+    const desktopItemsPerPage = 5;
+    const itemsPerPage = window.innerWidth < 768 ? mobileItemsPerPage : desktopItemsPerPage;
     const totalPages = Math.ceil(validMovieData.length / itemsPerPage);
     const paginatedMovies = Array.from({ length: totalPages }, (_, i) =>
         validMovieData.slice(i * itemsPerPage, (i + 1) * itemsPerPage)
     );
 
-    
     useEffect(() => {
         if (totalPages <= 1 || isHovering) return;
         
@@ -76,7 +77,6 @@ const HeroSection = () => {
 
     return (
         <section className="relative bg-black overflow-hidden">
-           
             <div className="relative h-[90vh] w-full">
                 <img 
                     src="https://images4.alphacoders.com/133/1336451.jpg" 
@@ -84,8 +84,6 @@ const HeroSection = () => {
                     alt="Cinematic background"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
-                
-                {/* Hero Title */}
                 <motion.div 
                     className="absolute inset-0 flex items-center justify-center px-4 z-10"
                     initial="hidden"
@@ -99,7 +97,6 @@ const HeroSection = () => {
                 </motion.div>
             </div>
 
-         
             <div 
                 className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"
                 onMouseEnter={() => setIsHovering(true)}
@@ -127,13 +124,13 @@ const HeroSection = () => {
                         <>
                             {validMovieData.length > 0 ? (
                                 <>
-                                    <div className="relative overflow-hidden">
-                                        <div className="flex transition-transform duration-500">
-                                            {paginatedMovies[activeIndex]?.map((item, i) => (
+                                    <div className="relative">
+                                        <div className="flex overflow-x-auto snap-x snap-mandatory pb-4 -mx-2 scrollbar-hide">
+                                            {validMovieData.map((item, i) => (
                                                 <motion.div
                                                     key={item.imdbID}
-                                                    className="px-2 flex-shrink-0 w-1/5"
-                                                    custom={i}
+                                                    className="px-2 flex-shrink-0 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 snap-center"
+                                                    custom={i % itemsPerPage}
                                                     variants={cardVariants}
                                                     initial="hidden"
                                                     animate="visible"
@@ -166,20 +163,26 @@ const HeroSection = () => {
                                         </div>
                                     </div>
 
-                                    {totalPages > 1 && (
-                                        <div className="flex justify-center mt-8 gap-2">
-                                            {paginatedMovies.map((_, idx) => (
-                                                <motion.button
-                                                    key={idx}
-                                                    onClick={() => setActiveIndex(idx)}
-                                                    variants={paginationDotVariants}
-                                                    animate={activeIndex === idx ? "active" : "inactive"}
-                                                    className="w-3 h-3 rounded-full focus:outline-none"
-                                                    aria-label={`Go to slide ${idx + 1}`}
-                                                />
-                                            ))}
-                                        </div>
-                                    )}
+                                    <div className="flex justify-center mt-8 gap-2">
+                                        {Array.from({ length: totalPages }).map((_, idx) => (
+                                            <motion.button
+                                                key={idx}
+                                                onClick={() => {
+                                                    const container = document.querySelector('.scrollbar-hide');
+                                                    const cardWidth = container?.scrollWidth / validMovieData.length;
+                                                    container?.scrollTo({
+                                                        left: idx * itemsPerPage * cardWidth * (window.innerWidth < 768 ? 2 : 1),
+                                                        behavior: 'smooth'
+                                                    });
+                                                    setActiveIndex(idx);
+                                                }}
+                                                variants={paginationDotVariants}
+                                                animate={activeIndex === idx ? "active" : "inactive"}
+                                                className="w-3 h-3 rounded-full focus:outline-none"
+                                                aria-label={`Go to slide ${idx + 1}`}
+                                            />
+                                        ))}
+                                    </div>
                                 </>
                             ) : (
                                 <p className="text-center text-gray-400 py-10">No movies available</p>
