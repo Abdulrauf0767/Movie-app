@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { fetchMovieData } from "../Features/DataSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
-    const {list : MovieData, status } = useSelector((state) => state.movieData);
+    const { list: MovieData, status } = useSelector((state) => state.movieData);
     const dispatch = useDispatch();
     const [activeIndex, setActiveIndex] = useState(0);
     const [isHovering, setIsHovering] = useState(false);
+    const containerRef = useRef(null);
 
     useEffect(() => {
         dispatch(fetchMovieData("popular movies"));
@@ -25,13 +26,22 @@ const HeroSection = () => {
 
     useEffect(() => {
         if (totalPages <= 1 || isHovering) return;
-        
+
         const interval = setInterval(() => {
-            setActiveIndex((prev) => (prev + 1) % totalPages);
-        }, 5000);
+            const nextIndex = (activeIndex + 1) % totalPages;
+            setActiveIndex(nextIndex);
+            const container = containerRef.current;
+            if (container) {
+                const cardWidth = container.scrollWidth / validMovieData.length;
+                container.scrollTo({
+                    left: nextIndex * itemsPerPage * cardWidth,
+                    behavior: 'smooth'
+                });
+            }
+        }, 2000);
 
         return () => clearInterval(interval);
-    }, [totalPages, isHovering]);
+    }, [activeIndex, totalPages, isHovering, validMovieData.length, itemsPerPage]);
 
     const cardVariants = {
         hidden: { opacity: 0, y: 20 },
@@ -125,7 +135,10 @@ const HeroSection = () => {
                             {validMovieData.length > 0 ? (
                                 <>
                                     <div className="relative">
-                                        <div className="flex overflow-x-auto snap-x snap-mandatory pb-4 -mx-2 scrollbar-hide">
+                                        <div
+                                            ref={containerRef}
+                                            className="flex overflow-x-auto snap-x snap-mandatory pb-4 -mx-2 scrollbar-hide"
+                                        >
                                             {validMovieData.map((item, i) => (
                                                 <motion.div
                                                     key={item.imdbID}
@@ -168,10 +181,10 @@ const HeroSection = () => {
                                             <motion.button
                                                 key={idx}
                                                 onClick={() => {
-                                                    const container = document.querySelector('.scrollbar-hide');
+                                                    const container = containerRef.current;
                                                     const cardWidth = container?.scrollWidth / validMovieData.length;
                                                     container?.scrollTo({
-                                                        left: idx * itemsPerPage * cardWidth * (window.innerWidth < 768 ? 2 : 1),
+                                                        left: idx * itemsPerPage * cardWidth,
                                                         behavior: 'smooth'
                                                     });
                                                     setActiveIndex(idx);
