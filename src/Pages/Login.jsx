@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { motion } from 'framer-motion';
-import { FiMail, FiLock, FiLoader } from 'react-icons/fi';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiMail, FiLock, FiLoader, FiCheckCircle } from 'react-icons/fi';
 import AuthLayout from './Authlayout';
 
 const LoginSchema = Yup.object().shape({
@@ -10,10 +11,15 @@ const LoginSchema = Yup.object().shape({
 });
 
 const Login = () => {
-  const handleSubmit = (values, { setSubmitting }) => {
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const handleSubmit = (values, { setSubmitting, resetForm }) => {
     setTimeout(() => {
       console.log(values);
+      setShowSuccess(true);
       setSubmitting(false);
+      resetForm();
+      setTimeout(() => setShowSuccess(false), 3000);
     }, 1500);
   };
 
@@ -39,20 +45,27 @@ const Login = () => {
                 <Field
                   name="email"
                   type="email"
-                  className={`w-full bg-gray-700 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:ring-2 ${errors.email && touched.email ? 'focus:ring-red-500 border-red-500' : 'focus:ring-red-500 border-gray-600'}`}
+                  className={`w-full bg-gray-700 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:ring-2 ${
+                    errors.email && touched.email
+                      ? 'focus:ring-red-500 border-red-500'
+                      : 'focus:ring-red-500 border-gray-600'
+                  }`}
                   placeholder="your@email.com"
                 />
                 <FiMail className="absolute left-3 top-3.5 text-gray-400" />
               </div>
-              {errors.email && touched.email && (
-                <motion.div 
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-red-500 text-sm mt-1"
-                >
-                  {errors.email}
-                </motion.div>
-              )}
+              <AnimatePresence>
+                {errors.email && touched.email && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
+                    className="text-red-500 text-sm mt-1"
+                  >
+                    {errors.email}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <div>
@@ -63,20 +76,27 @@ const Login = () => {
                 <Field
                   name="password"
                   type="password"
-                  className={`w-full bg-gray-700 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:ring-2 ${errors.password && touched.password ? 'focus:ring-red-500 border-red-500' : 'focus:ring-red-500 border-gray-600'}`}
+                  className={`w-full bg-gray-700 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:ring-2 ${
+                    errors.password && touched.password
+                      ? 'focus:ring-red-500 border-red-500'
+                      : 'focus:ring-red-500 border-gray-600'
+                  }`}
                   placeholder="••••••••"
                 />
                 <FiLock className="absolute left-3 top-3.5 text-gray-400" />
               </div>
-              {errors.password && touched.password && (
-                <motion.div 
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-red-500 text-sm mt-1"
-                >
-                  {errors.password}
-                </motion.div>
-              )}
+              <AnimatePresence>
+                {errors.password && touched.password && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
+                    className="text-red-500 text-sm mt-1"
+                  >
+                    {errors.password}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <div className="flex items-center justify-between">
@@ -109,6 +129,20 @@ const Login = () => {
                 'Log in'
               )}
             </motion.button>
+
+            <AnimatePresence>
+              {showSuccess && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex items-center justify-center text-green-500 text-sm mt-4"
+                >
+                  <FiCheckCircle className="mr-2" />
+                  Logged in successfully!
+                </motion.div>
+              )}
+            </AnimatePresence>
           </Form>
         )}
       </Formik>
