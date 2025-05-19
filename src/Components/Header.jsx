@@ -36,8 +36,8 @@ const Header = () => {
                     <ul className='flex justify-between items-center h-full'>
                         <NavLink to='/' className='text-white font-roboto hover:text-red-500 transition'>Home</NavLink>
                         <NavLink to='/movies' className='text-white font-roboto hover:text-red-500 transition'>Movies</NavLink>
-                        <NavLink to='/list' className='text-white font-roboto hover:text-red-500 transition'>List</NavLink>
                         <NavLink to='/contact' className='text-white font-roboto hover:text-red-500 transition'>Contact us</NavLink>
+                        <NavLink to='/login' className='text-white font-roboto hover:text-red-500 transition'>Login</NavLink>
                         <NavLink to='/signup' className='text-white font-roboto hover:text-red-500 transition'>Signup</NavLink>
                     </ul>
                 </nav>
@@ -52,8 +52,8 @@ const Header = () => {
                     <ul className="flex flex-col space-y-4">
                         <NavLink to='/' onClick={() => setIsMenuOpen(false)} className='text-white font-roboto hover:text-red-500 transition'>Home</NavLink>
                         <NavLink to='/movies' onClick={() => setIsMenuOpen(false)} className='text-white font-roboto hover:text-red-500 transition'>Movies</NavLink>
-                        <NavLink to='/list' onClick={() => setIsMenuOpen(false)} className='text-white font-roboto hover:text-red-500 transition'>List</NavLink>
                         <NavLink to='/contact' onClick={() => setIsMenuOpen(false)} className='text-white font-roboto hover:text-red-500 transition'>Contact us</NavLink>
+                        <NavLink to='/login' onClick={() => setIsMenuOpen(false)} className='text-white font-roboto hover:text-red-500 transition'>Login</NavLink>
                         <NavLink to='/signup' onClick={() => setIsMenuOpen(false)} className='text-white font-roboto hover:text-red-500 transition'>Signup</NavLink>
                     </ul>
                     <form onSubmit={handleSearch} className='w-full mt-4 h-9 rounded-3xl border border-gray-200 flex items-center relative'>
