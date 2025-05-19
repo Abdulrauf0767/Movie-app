@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { fetchMovieData, setSearchQuery } from '../Features/DataSlice';
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [localSearchQuery, setLocalSearchQuery] = useState("");
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
     const handleSearch = (e) => {
-        e.preventDefault();
-        if (!localSearchQuery.trim()) return;
-        dispatch(setSearchQuery(localSearchQuery));
-        dispatch(fetchMovieData(localSearchQuery));
+       e.preventDefault();
+    dispatch(setSearchQuery(localSearchQuery)); 
+    navigate('/search');
     };
 
     return (

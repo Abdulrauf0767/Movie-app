@@ -36,11 +36,13 @@ const MovieSlice = createSlice({
     list: [],
     status: "idle",
     search: '',
+    searchList : [] ,
     error: null,
   },
   reducers: {
     setSearchQuery: (state, action) => {
       state.search = action.payload;
+      state.list = [] ;
     }
   },
   extraReducers: (builder) => {
