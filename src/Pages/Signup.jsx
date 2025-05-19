@@ -1,15 +1,26 @@
-import { useState } from 'react';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import { motion } from 'framer-motion';
-import { FiUser, FiMail, FiLock, FiLoader, FiCheckCircle } from 'react-icons/fi';
-import AuthLayout from './Authlayout';
+import { useState } from "react";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import { motion } from "framer-motion";
+import {
+  FiUser,
+  FiMail,
+  FiLock,
+  FiLoader,
+  FiCheckCircle,
+} from "react-icons/fi";
+import AuthLayout from "./Authlayout";
 
 const SignupSchema = Yup.object().shape({
-  name: Yup.string().min(2, 'Too short').max(50, 'Too long').required('Required'),
-  email: Yup.string().email('Invalid email').required('Required'),
-  password: Yup.string().min(8, 'Too short').required('Required'),
-  confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Required'),
+  name: Yup.string()
+    .min(2, "Too short")
+    .max(50, "Too long")
+    .required("Required"),
+  email: Yup.string().email("Invalid email").required("Required"),
+  password: Yup.string().min(8, "Too short").required("Required"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password"), null], "Passwords must match")
+    .required("Required"),
 });
 
 const Signup = () => {
@@ -27,7 +38,7 @@ const Signup = () => {
 
   return (
     <AuthLayout
-      title="Join StreamFlix"
+      title="Sign up"
       subtitle="Create your account to start your movie journey"
       linkText="Already have an account? Log in"
       linkPath="/login"
@@ -43,7 +54,12 @@ const Signup = () => {
         </motion.div>
       )}
       <Formik
-        initialValues={{ name: '', email: '', password: '', confirmPassword: '' }}
+        initialValues={{
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        }}
         validationSchema={SignupSchema}
         onSubmit={handleSubmit}
       >
@@ -58,14 +74,20 @@ const Signup = () => {
                   name="name"
                   type="text"
                   className={`w-full bg-gray-700 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:ring-2 ${
-                    errors.name && touched.name ? 'focus:ring-red-500 border-red-500' : 'focus:ring-red-500 border-gray-600'
+                    errors.name && touched.name
+                      ? "focus:ring-red-500 border-red-500"
+                      : "focus:ring-red-500 border-gray-600"
                   }`}
                   placeholder="John Doe"
                 />
                 <FiUser className="absolute left-3 top-3.5 text-gray-400" />
               </div>
               {errors.name && touched.name && (
-                <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-red-500 text-sm mt-1">
+                <motion.div
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-500 text-sm mt-1"
+                >
                   {errors.name}
                 </motion.div>
               )}
@@ -80,21 +102,30 @@ const Signup = () => {
                   name="email"
                   type="email"
                   className={`w-full bg-gray-700 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:ring-2 ${
-                    errors.email && touched.email ? 'focus:ring-red-500 border-red-500' : 'focus:ring-red-500 border-gray-600'
+                    errors.email && touched.email
+                      ? "focus:ring-red-500 border-red-500"
+                      : "focus:ring-red-500 border-gray-600"
                   }`}
                   placeholder="your@email.com"
                 />
                 <FiMail className="absolute left-3 top-3.5 text-gray-400" />
               </div>
               {errors.email && touched.email && (
-                <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-red-500 text-sm mt-1">
+                <motion.div
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-500 text-sm mt-1"
+                >
                   {errors.email}
                 </motion.div>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1" htmlFor="password">
+              <label
+                className="block text-sm font-medium mb-1"
+                htmlFor="password"
+              >
                 Password
               </label>
               <div className="relative">
@@ -102,21 +133,30 @@ const Signup = () => {
                   name="password"
                   type="password"
                   className={`w-full bg-gray-700 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:ring-2 ${
-                    errors.password && touched.password ? 'focus:ring-red-500 border-red-500' : 'focus:ring-red-500 border-gray-600'
+                    errors.password && touched.password
+                      ? "focus:ring-red-500 border-red-500"
+                      : "focus:ring-red-500 border-gray-600"
                   }`}
                   placeholder="••••••••"
                 />
                 <FiLock className="absolute left-3 top-3.5 text-gray-400" />
               </div>
               {errors.password && touched.password && (
-                <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-red-500 text-sm mt-1">
+                <motion.div
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-500 text-sm mt-1"
+                >
                   {errors.password}
                 </motion.div>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1" htmlFor="confirmPassword">
+              <label
+                className="block text-sm font-medium mb-1"
+                htmlFor="confirmPassword"
+              >
                 Confirm Password
               </label>
               <div className="relative">
@@ -124,14 +164,20 @@ const Signup = () => {
                   name="confirmPassword"
                   type="password"
                   className={`w-full bg-gray-700 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:ring-2 ${
-                    errors.confirmPassword && touched.confirmPassword ? 'focus:ring-red-500 border-red-500' : 'focus:ring-red-500 border-gray-600'
+                    errors.confirmPassword && touched.confirmPassword
+                      ? "focus:ring-red-500 border-red-500"
+                      : "focus:ring-red-500 border-gray-600"
                   }`}
                   placeholder="••••••••"
                 />
                 <FiLock className="absolute left-3 top-3.5 text-gray-400" />
               </div>
               {errors.confirmPassword && touched.confirmPassword && (
-                <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-red-500 text-sm mt-1">
+                <motion.div
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-500 text-sm mt-1"
+                >
                   {errors.confirmPassword}
                 </motion.div>
               )}
@@ -150,7 +196,7 @@ const Signup = () => {
                   Creating account...
                 </>
               ) : (
-                'Sign up'
+                "Sign up"
               )}
             </motion.button>
           </Form>

@@ -5,7 +5,7 @@ const AuthLayout = ({ children, title, subtitle, linkText, linkPath }) => {
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col">
       <header className="py-6 px-4 sm:px-8">
-        <div className="text-2xl font-bold text-red-500">STREAMFLIX</div>
+        <div className="text-2xl font-bold text-red-500">Movie app</div>
       </header>
       
       <motion.main 
