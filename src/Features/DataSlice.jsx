@@ -36,7 +36,6 @@ const MovieSlice = createSlice({
     list: [],
     status: "idle",
     search: '',
-    searchList : [] ,
     error: null,
   },
   reducers: {
