@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
-    const { list: MovieData, status } = useSelector((state) => state.movieData);
+    const {list : MovieData, status } = useSelector((state) => state.movieData);
     const dispatch = useDispatch();
     const [activeIndex, setActiveIndex] = useState(0);
     const [isHovering, setIsHovering] = useState(false);
